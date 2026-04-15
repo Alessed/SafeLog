@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/history.css' %}">
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<nav class="navbar animate-in">
+    <div class="nav-brand">
+        <div class="brand-icon"><i class='bx bx-pulse'></i></div>
+        <div class="brand-info">
+            <h3 style="margin:0; color: white; font-size: 1.2rem;">SafeLog</h3>
+            <span class="nav-status">SYSTEM_ACTIVE</span>
+        </div>
+    </div>
+    
+    <div class="nav-user">
+        {% if user.is_staff %}
+        <div class="notif-bell" id="notifDropdown">
+            <i class='bx bx-bell'></i>
+            <div id="badge-container">
+                {% if notificaciones_count > 0 %}
+                    <div class="notif-dot">{{ notificaciones_count }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="notif-panel" id="notifPanel">
+                <div class="notif-header">ALERTAS RECIENTES</div>
+                <div class="notif-content" id="notifContent">
+                    {% for n in notificaciones_recientes %}
+                        <div class="notif-item">
+                            <small>{{ n.usuario.username|upper }} REPORTÓ:</small>
+                            <p>{{ n.titulo|truncatechars:35 }}</p>
+                        </div>
+                    {% empty %}
+                        <div class="notif-empty">SIN ALERTAS PENDIENTES</div>
+                    {% endfor %}
+                </div>
+                <a href="{% url 'lista_incidentes' %}" class="notif-footer">SINCRONIZAR VISTA</a>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="user-profile">
+            <i class='bx bx-user-circle'></i>
+            <span>{{ user.username|upper }}</span>
+        </div>
+
+        <a href="{% url 'logout' %}" class="btn-logout" title="Cerrar Sesión">
+            <i class='bx bx-log-out'></i>
+            <span class="logout-text">SALIR</span>
+        </a>
+    </div>
+</nav>
+{% endif %}
+
+<div class="history-container">
+    <div class="stats-grid">
+        <div class="stat-card animate-in" style="animation-delay: 0.1s;">
+            <div class="stat-icon" style="background: rgba(249, 115, 22, 0.1);"><i class='bx bx-error' style="color: #f97316;"></i></div>
+            <div class="stat-value">12</div>
+            <div class="stat-label">Incidentes Activos</div>
+            <span class="stat-delta delta-up">+3</span>
+        </div>
+        
+        <div class="stat-card animate-in" style="animation-delay: 0.2s;">
+            <div class="stat-icon" style="background: rgba(46, 204, 113, 0.1);"><i class='bx bx-check-circle' style="color: var(--neon-green);"></i></div>
+            <div class="stat-value">24</div>
+            <div class="stat-label">Resueltos Hoy</div>
+            <span class="stat-delta delta-up">+8</span>
+        </div>
+        
+        <div class="stat-card animate-in" style="animation-delay: 0.3s;">
+            <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1);"><i class='bx bx-time' style="color: #3b82f6;"></i></div>
+            <div class="stat-value">2.4h</div>
+            <div class="stat-label">Tiempo Promedio</div>
+            <span class="stat-delta delta-down">-0.5h</span>
+        </div>
+    </div>
+
+    <div class="section-header animate-in" style="animation-delay: 0.4s;">
+        <div>
+            <h2 style="margin: 0; letter-spacing: 1px; color: white;">MONITOREO DE INCIDENTES</h2>
+            <p style="color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase;">Turno Actual - Tiempo Real</p>
+        </div>
+        <a href="{% url 'crear_incidente' %}" class="btn-new">
+            <i class='bx bx-plus-circle'></i> NUEVO REPORTE
+        </a>
+    </div>
+
+    <div class="incident-list">
+        {% for incidente in incidentes %}
+        <div class="incident-item animate-in" style="animation-delay: 0.{{ forloop.counter }}s;">
+            <div class="incident-left">
+                <div class="evidence-wrapper">
+                    {% if incidente.imagen %}
+                        <img src="{{ incidente.imagen.url }}" class="evidence-thumb" onclick="window.open(this.src)">
+                    {% else %}
+                        <div class="evidence-placeholder">
+                            <i class='bx bx-image-alt'></i>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="incident-body">
+                    <div class="badge-group">
+                        <span class="badge badge-id">#{{ incidente.id }}</span>
+                        <span class="badge badge-user"><i class='bx bx-user'></i> {{ incidente.usuario.username|upper }}</span>
+                        <span class="badge badge-critical">CRÍTICO</span>
+                        <span class="badge badge-active">ACTIVO</span>
+                    </div>
+                    <h4 class="incident-title">{{ incidente.titulo }}</h4>
+                    <p class="incident-desc">{{ incidente.descripcion|truncatechars:100 }}</p>
+                </div>
+            </div>
+            
+            <div class="incident-right">
+                <i class='bx bx-chevron-right'></i>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <i class='bx bx-ghost'></i>
+            <p>No hay registros en la base de datos local.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

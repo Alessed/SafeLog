@@ -1,0 +1,149 @@
+/* static/css/registro.css */
+:root {
+    --neon-green: #2ecc71;
+    --neon-glow: rgba(46, 204, 113, 0.4);
+    --dark-bg: #0a1f1a;
+    --glass-card: rgba(255, 255, 255, 0.05);
+    --border-color: rgba(46, 204, 113, 0.2);
+}
+
+.report-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at center, #1a3c34 0%, #0a1f1a 100%);
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.glass-card {
+    background: var(--glass-card);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 30px;
+    border-radius: 24px;
+    border: 1px solid var(--border-color);
+    width: 100%;
+    max-width: 500px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.form-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-header i {
+    font-size: 3.5rem;
+    color: var(--neon-green);
+    filter: drop-shadow(0 0 10px var(--neon-glow));
+}
+
+.form-header h2 {
+    color: white;
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+
+.form-header p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+/* Estilos de los Grupos de Formulario */
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    color: var(--neon-green);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group input[type="text"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-glow);
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo especial para el input de Zona (Lectura) */
+#display-zona {
+    background: rgba(46, 204, 113, 0.1) !important;
+    border: 1px dashed var(--neon-green) !important;
+    color: var(--neon-green) !important;
+    font-weight: bold;
+    cursor: not-allowed;
+}
+
+/* Estilo para el input de archivo */
+input[type="file"] {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+    background: transparent;
+    padding: 10px 0;
+}
+
+.btn-submit {
+    background: var(--neon-green);
+    color: #0a1f1a;
+    border: none;
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px var(--neon-glow);
+    filter: brightness(1.1);
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+    .report-page {
+        padding: 10px;
+        align-items: flex-start;
+    }
+
+    .glass-card {
+        padding: 20px;
+        border-radius: 15px;
+        background: rgba(10, 31, 26, 0.95);
+        /* Más sólido en móvil */
+    }
+}

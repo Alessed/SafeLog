@@ -1,0 +1,11 @@
+1. ¿Por qué es una PWA y no solo una web o una app móvil?
+
+Una aplicación móvil nativa (como las que bajas de la Play Store hechas en Java/Kotlin) se instala directamente en el sistema operativo. Lo que tú tienes es un híbrido que utiliza tecnologías web para comportarse como una app.
+
+Para que se considere PWA, debe cumplir con tres pilares que tu sistema ya tiene:
+
+    Manifest (manifest.json): Es lo que permite que el celular la "instale" con icono y nombre, eliminando la barra de direcciones del navegador.
+
+    Service Worker: Es lo que permite que la app cargue aunque no tengas internet (Modo Offline). Una web normal simplemente daría error de "Sin conexión".
+
+    HTTPS: Es obligatorio para que el navegador confíe en la app (Ngrok te está dando esa capa de seguridad).

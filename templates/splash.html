@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/splash.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="splash-container">
+    <div class="glow-bg"></div>
+    
+    <div class="content-wrapper">
+        <div class="logo-section">
+            <div class="circle-border"></div>
+            <div class="shield-box">
+                <i class='bx bx-shield-quarter'></i>
+                <div class="pulse-dot">
+                    <i class='bx bx-error-circle'></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="brand-text">
+            <h1 class="glow-text">SafeLog</h1>
+            <p class="subtitle">Sistema de Registro de Incidentes</p>
+            <p class="description">Gestiona y monitorea incidentes en maquinaria industrial de manera eficiente y profesional</p>
+        </div>
+
+        <a href="{% url 'login' %}" class="btn-start">
+            Iniciar <i class='bx bx-right-arrow-alt arrow-icon'></i>
+        </a>
+
+        <div class="loader-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Redirige al home automáticamente tras 4 segundos
+    setTimeout(function(){
+        window.location.href = "{% url 'login' %}";
+    }, 4000);
+</script>
+
+{% endblock %}

@@ -1,0 +1,92 @@
+:root {
+    --primary-gradient: linear-gradient(135deg, #0061ff 0%, #60efff 100%);
+    --dark-blue: #1e3a8a;
+    --soft-blue: #eff6ff;
+    --white: #ffffff;
+    --gray: #64748b;
+    --radius: 16px;
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background-color: var(--soft-blue);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 20px;
+}
+
+/* Estilo de Tarjetas del Dashboard y Formulario */
+.glass-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+/* Estilos del Formulario */
+.form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--dark-blue);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+input[type="text"],
+textarea,
+select {
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #0061ff;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(0, 97, 255, 0.1);
+}
+
+/* Input de archivo personalizado */
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    width: 100%;
+}
+
+.btn-submit {
+    background: var(--primary-gradient);
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px -10px rgba(0, 97, 255, 0.5);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}

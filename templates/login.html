@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <div class="login-box animate-in">
+        <div class="login-header">
+            <i class='bx bx-shield-quarter bx-tada'></i>
+            <h2>SafeLog</h2>
+            <p style="color: rgba(255,255,255,0.5); font-size: 0.9rem;">Autenticación de Sistema</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="input-group">
+                <i class='bx bx-user'></i>
+                <input type="text" name="username" class="input-field" placeholder="Nombre de usuario" required autofocus>
+            </div>
+            
+            <div class="input-group">
+                <i class='bx bx-lock-alt'></i>
+                <input type="password" name="password" class="input-field" placeholder="Contraseña" required>
+            </div>
+            
+            <button type="submit" class="btn-submit">
+                INICIAR SESIÓN <i class='bx bx-right-arrow-alt'></i>
+            </button>
+        </form>
+        
+        {% if form.errors %}
+            <div class="error-msg">
+                <i class='bx bx-error-circle'></i>
+                <span>Credenciales no válidas. Intente de nuevo.</span>
+            </div>
+        {% endif %}
+
+        <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;">
+            <p style="color: rgba(255,255,255,0.3); font-size: 0.7rem;">
+                SISTEMA MONITOREADO - IP REGISTRADA
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

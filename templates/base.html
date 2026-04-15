@@ -1,0 +1,108 @@
+{% load static %}
+{% load pwa %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeLog - Sistema de Gestión</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{% static 'css/history.css' %}">
+    {% block extra_css %}{% endblock %}
+    {% progressive_web_app_meta %}
+</head>
+<body>
+   
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+   <script>
+    const bell = document.getElementById('notifDropdown');
+    const panel = document.getElementById('notifPanel');
+    const badgeContainer = document.getElementById('badge-container');
+    const notifContent = document.getElementById('notifContent');
+    
+    // Variable para rastrear el último ID recibido
+    let lastId = 0; 
+    let currentNewCount = 0;
+
+    // 1. Resetear contador al abrir el panel
+    if(bell) {
+        bell.addEventListener('click', (e) => {
+            e.stopPropagation();
+            panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+            
+            // Al abrir, limpiamos el badge de "nuevos"
+            currentNewCount = 0;
+            badgeContainer.innerHTML = '';
+        });
+    }
+
+    function updateNotifications() {
+        fetch(`{% url 'check_notifications' %}?last_id=${lastId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.count > 0) {
+                    // Actualizar el último ID visto para la próxima consulta
+                    lastId = data.recientes[0].id;
+                    currentNewCount += data.count;
+
+                    // 1. Actualizar Badge (solo si hay nuevos desde la última vez)
+                    badgeContainer.innerHTML = `<div class="notif-dot">${currentNewCount}</div>`;
+
+                    // 2. Inyectar en el Panel (Dropdown)
+                    data.recientes.forEach(inc => {
+                        const item = `
+                            <div class="notif-item" style="border-left: 4px solid #ef4444;">
+                                <small>${inc.usuario} reportó:</small>
+                                <p><strong>${inc.titulo}</strong></p>
+                            </div>`;
+                        notifContent.insertAdjacentHTML('afterbegin', item);
+
+                        // 3. Inyectar en la lista principal si existe en pantalla
+                        const mainList = document.querySelector('.incident-list');
+                        if (mainList) {
+                            const imgHtml = inc.imagen_url 
+                                ? `<img src="${inc.imagen_url}" class="evidence-thumb">`
+                                : `<div class="evidence-placeholder"><i class='bx bx-image-alt'></i></div>`;
+
+                            const cardHtml = `
+                                <div class="incident-item animate-in" style="border-left: 4px solid #ef4444; background: #fffaf0;">
+                                    <div style="display: flex; gap: 20px; align-items: center;">
+                                        <div class="evidence-wrapper">${imgHtml}</div>
+                                        <div>
+                                            <div style="margin-bottom: 4px;">
+                                                <span class="badge" style="background: #e2e8f0;">INC-2026-0${inc.id}</span>
+                                                <span class="badge" style="background: #f1f5f9; color: #475569;">
+                                                    <i class='bx bx-user'></i> ${inc.usuario}
+                                                </span>
+                                                <span class="badge badge-critical">NUEVO</span>
+                                            </div>
+                                            <h4 style="margin: 0;">${inc.titulo}</h4>
+                                            <p class="description-text">${inc.descripcion}</p>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: right;"><i class='bx bx-chevron-right'></i></div>
+                                </div>`;
+                            
+                            // Insertar al inicio de la lista
+                            mainList.insertAdjacentHTML('afterbegin', cardHtml);
+                        }
+                    });
+                }
+            });
+    }
+
+    // Inicializar el ID actual al cargar para no contar lo viejo como "nuevo"
+    {% if notificaciones_recientes %}
+        lastId = {{ notificaciones_recientes.0.id }};
+    {% endif %}
+
+    {% if user.is_staff %}
+        setInterval(updateNotifications, 10000); // Revisar cada 10 segundos
+    {% endif %}
+</script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

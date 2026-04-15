@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registro.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="report-page">
+    <div class="glass-card animate-in">
+        <div class="form-header">
+            <i class='bx bxs-megaphone bx-tada'></i>
+            <h2>Nuevo Reporte</h2>
+            <p>Sistema de Gestión de Incidentes</p>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data" id="incident-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label><i class='bx bx-edit-alt'></i> Título del Incidente</label>
+                <input type="text" name="titulo" placeholder="Ej: Falla en Impresora 3" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class='bx bx-category'></i> Categoría</label>
+                <select name="tipo">
+                    <option value="MANT">🛠️ Mantenimiento</option>
+                    <option value="SEG">🛡️ Seguridad</option>
+                    <option value="LIM">🧹 Limpieza</option>
+                    <option value="OTROS">❓ Otros</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class='bx bx-detail'></i> Descripción Detallada</label>
+                <textarea name="descripcion" rows="3" placeholder="Describe lo ocurrido..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label><i class='bx bx-camera'></i> Evidencia Fotográfica</label>
+                <input type="file" name="imagen" accept="image/*" capture="environment">
+            </div>
+
+            <div class="form-group">
+                <label><i class='bx bx-map-pin'></i> Ubicación / Zona</label>
+                <input type="text" id="display-zona" readonly>
+                <input type="hidden" name="zona_codigo" id="zona_codigo">
+            </div>
+
+            <input type="hidden" name="latitud" id="latitud">
+            <input type="hidden" name="longitud" id="longitud">
+
+            <button type="submit" class="btn-submit">
+                ENVIAR REPORTE <i class='bx bx-paper-plane'></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Lógica para Zona y GPS se mantiene igual
+    window.onload = () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const zona = urlParams.get('zona');
+        if (zona) {
+            document.getElementById('display-zona').value = zona;
+            document.getElementById('zona_codigo').value = zona;
+        } else {
+            document.getElementById('display-zona').value = "Manual / Sin QR";
+        }
+    }
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+            document.getElementById('latitud').value = pos.coords.latitude;
+            document.getElementById('longitud').value = pos.coords.longitude;
+        }, err => console.warn("GPS no disponible"));
+    }
+</script>
+{% endblock %}
